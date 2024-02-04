@@ -1,0 +1,22 @@
+Timer in CTC-Mode
+
+--- Alle x Millisekunden einen Interrupt auslösen
+
+1. Clock-Select-Logic programmieren
+Bei Timer einen der 5 möglichen prescaler Werte auswählen
+Bits CS<TimerNr>[2..0] im Register TCCR<TimerNr>B
+
+2. CTC-Mode aktivieren --> Bits WGM>TimerNr>[3..0] in den Registern 
+	TCCR<TimerNr>A und TCCR<TimerNr>B auf binär 0100 setzten
+
+
+3. Den Wert, bis zu dem der Zähler zählen soll, bevor e r wieder bei null beginnt, in das OCR<TimerNR>A Register schreiben
+	(Diesen Wert berechnen)
+
+4. Interrupts
+	- #inlcude <avr/interrrupt.h>
+	- Interrupt-Enable-Flag für den Compar-Match-A Interrup des Timers setzten (OCIE<TimerNr>A im Register TIMSK<TimerNr>
+	- sei();
+	- ISR (auserhalb von main) mit dem richtigen Interrupt-Vektor implementieren
+		(TIMER<TimerNr>_COMPA_vect)
+	- globale Variablen, die in der ISR beschrieben und im Hauptprogramm gelesen werden müssen volatile sein
